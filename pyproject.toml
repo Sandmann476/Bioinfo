@@ -4,4 +4,19 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "im2pdf>=0.1.1",
+    "img2pdf>=0.6.1",
+    "ipykernel>=6.30.0",
+    "matplotlib>=3.10.5",
+    "microfilm>=0.3.0",
+    "napari-segment-blobs-and-things-with-membranes>=0.3.12",
+    "napari-simpleitk-image-processing>=0.4.9",
+    "numpy>=2.3.2",
+    "pandas>=2.3.1",
+    "pyclesperanto>=0.18.0",
+    "pyclesperanto-prototype>=0.24.4",
+    "scikit-image>=0.25.2",
+    "simpleitk>=2.5.2",
+    "stackview>=0.18.0",
+]
