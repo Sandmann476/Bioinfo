@@ -13,20 +13,18 @@ from scipy import ndimage
 
 file_select = glob.glob(r"C:\Users\grufl\Desktop\211007 Sicherung USB\uni\Prakt bioinfo\Bioinfo\data\raw\selected-tiles\out_opt_flow_registered_X10_Y10_*.tif")
 
-def count_nuclei(file_select):
+def count_nuclei(file_select, sigma_select=2, size_min = 150, size_max = 2000):
     file_list = []
     for file in file_select:
         file_list.append(ski.io.imread(file))
 
-    binary_list = []
-    #nuclei_count = []
+    
     data = {
         "file": [],
         "nuclei_count": [],
+        "binary_list": [],
     }
-    size_min = 150
-    size_max = 2000
-    
+
     # Set your output directory and file name
     output_dir = r"C:\Users\grufl\Desktop\211007 Sicherung USB\uni\Prakt bioinfo\Bioinfo\data\processed/images"
     os.makedirs(output_dir, exist_ok=True)
@@ -35,7 +33,7 @@ def count_nuclei(file_select):
         data["file"].append(file)
         image = ski.io.imread(file)
         # Apply Gaussian filter to denoise the image
-        image_denoised = gaussian(image, sigma=2, preserve_range=True)
+        image_denoised = gaussian(image, sigma_select, preserve_range=True)
         image_binary = image_denoised > ski.filters.threshold_li(image_denoised)
         split_objects = split_touching_objects(image_binary)
         # Convert boolean array to uint8 for cle.gauss_otsu_labeling
@@ -47,11 +45,11 @@ def count_nuclei(file_select):
         # Convert filtered labels to monochrome (binary) image
         monochrome = (filtered_labels > 0).astype(np.uint8)
         #nuclei_count.append(num_features)
-        binary_list.append(monochrome)
+        data["binary_list"].append(monochrome)
 
     #saving images as PDF
 
-    for idx, img in enumerate(binary_list):
+    for idx, img in enumerate(data["binary_list"]):
         # Erzeuge einen Dateinamen, z.B. monochrome_0.pdf, monochrome_1.pdf, ...
         pdf_path = os.path.join(output_dir, f"monochrome_{idx+1}.pdf")
         # Falls img ein pyclesperanto-Array ist, zuerst zu numpy holen:
@@ -69,7 +67,7 @@ def count_nuclei(file_select):
 
     fig, axs = plt.subplots(4, 6, figsize=(25, 15))
     for i, ax in enumerate(axs.flatten()):
-        ax.imshow(binary_list[i])
+        ax.imshow(data["binary_list"][i])
     plt.show()
     #print(nuclei_count)
     print(data)
