@@ -33,16 +33,16 @@ def nuclei_count(file_select, size_min, size_max):
         monochrome = (filtered_labels > 0).astype(np.uint8)
         binary_list.append(monochrome)
 
-#saving images as PDF
+    #saving images as PDF
     
-# Set your output directory and file name
+    # Set your output directory and file name
     output_dir = r"C:\Users\grufl\Desktop\211007 Sicherung USB\uni\Prakt bioinfo\Bioinfo\data\processed/images"
     os.makedirs(output_dir, exist_ok=True)
 
     for idx, img in enumerate(binary_list):
         # Erzeuge einen Dateinamen, z.B. monochrome_0.pdf, monochrome_1.pdf, ...
         pdf_path = os.path.join(output_dir, f"monochrome_{idx+1}.pdf")
-    # Falls img ein pyclesperanto-Array ist, zuerst zu numpy holen:
+        # Falls img ein pyclesperanto-Array ist, zuerst zu numpy holen:
         if hasattr(img, "get"):
             img = img.get()
         pil_img = Image.fromarray((img * 255).astype('uint8')).convert('L')
